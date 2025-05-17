@@ -4,8 +4,8 @@ Bu proje, ebebek.com ana sayfasında çalışacak şekilde tasarlanmış, **sade
 
 ## 🔔 Önemli Notlar
 
-1. **Başlık Güncellemesi**  
-   PDF dokümanında `"Beğenebileceğinizi düşündüklerimiz"` yazıyordu, ancak ebebek sitesindeki güncel tasarıma uyması adına `"Sizin için Seçtiklerimiz"` başlığı kullanıldı.
+1. **Kullanıcı Değerlendirmelerı**  
+    PDF dokümanında ve fetch edilen verilerde bu bölüme dair herhangi bir bilgi bulunmadığı için, kullanıcı değerlendirmeleri ve puanlar karusel içinde gösterilmemektedir. Ancak bu özellikler istenildiği takdirde kolaylıkla eklenebilir.
 
 2. **Karusel Yerleştirme Mantığı**  
    Karusel şu sıralama ile uygun DOM öğesini arar ve ardından ekler:
@@ -14,10 +14,3 @@ Bu proje, ebebek.com ana sayfasında çalışacak şekilde tasarlanmış, **sade
    - `.Section1` (ebebek’in güncel yapısı)
 
    Eğer hiçbiri bulunamazsa, `document.body`'nin başına ekler (fallback).
-
-## 🧪 Nasıl Test Edilir?
-
-1. [https://www.e-bebek.com](https://www.e-bebek.com) adresine git
-2. Chrome'da geliştirici araçlarını aç (`F12`)
-3. **Console** sekmesine geç
-4. Tüm JS dosyasını yapıştır ve Enter’a bas

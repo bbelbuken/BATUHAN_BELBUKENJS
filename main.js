@@ -59,7 +59,7 @@
         carouselContainer.appendChild(title);
 
         const titleSpan = document.createElement('span');
-        titleSpan.textContent = 'Sizin için Seçtiklerimiz';
+        titleSpan.textContent = 'Beğenebileceğinizi düşündüklerimiz';
         titleSpan.style.marginLeft = '38px';
         title.appendChild(titleSpan);
 
@@ -110,6 +110,11 @@
             currentPrice.className = 'product-price-current';
             currentPrice.textContent = `${product.price} TL`;
             priceContainer.appendChild(currentPrice);
+
+            const addToCartBtn = document.createElement('button');
+            addToCartBtn.className = 'add-to-cart';
+            addToCartBtn.textContent = 'Sepete Ekle';
+            productCard.appendChild(addToCartBtn);
 
             let originalPrice, discountSection;
 
@@ -290,6 +295,35 @@
                 border-radius: 4px;
                 font-size: 12px;
                 align-self: flex-start;
+                margin-bottom: 70px;
+
+            }
+
+            .add-to-cart {
+                background-color: #fef6eb;
+                color: #f28e00;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 15px;
+                cursor: pointer;
+                font-family: 'Poppins', sans-serif;
+                font-weight: 600;
+                font-size: 14px;
+                width: 90%;
+                max-width: 200px; 
+                margin: 10px auto 0;
+                display: block;
+                transition: all 0.3s ease;
+                position: absolute;
+                bottom: 15px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .add-to-cart:hover {
+                background-color: #e07d00;
+                color: white;   
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             }
             
             .product-favorite {
@@ -358,6 +392,8 @@
                     border-radius: 10px;
                 }
 
+
+                
             }
             
             @media (max-width: 1480px) {
@@ -387,6 +423,7 @@
                     display: flex; 
                     flex-direction: column; 
                 }
+
             }
         `;
         document.head.appendChild(style);
