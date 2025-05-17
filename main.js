@@ -56,8 +56,12 @@
 
         const title = document.createElement('h2');
         title.className = 'carousel-title';
-        title.textContent = 'Beğenebileceğinizi düşündüklerimiz';
         carouselContainer.appendChild(title);
+
+        const titleSpan = document.createElement('span');
+        titleSpan.textContent = 'Sizin için Seçtiklerimiz';
+        titleSpan.style.marginLeft = '38px';
+        title.appendChild(titleSpan);
 
         const carousel = document.createElement('div');
         carousel.className = 'carousel';
@@ -113,6 +117,7 @@
                 product.original_price &&
                 product.original_price !== product.price
             ) {
+                currentPrice.className = 'product-price-current-discount';
                 originalPrice = document.createElement('span');
                 originalPrice.className = 'product-price-original';
                 originalPrice.textContent = `${product.original_price} TL`;
@@ -152,32 +157,47 @@
     };
 
     const buildCSS = () => {
+        const fontLink = document.createElement('link');
+        fontLink.href =
+            'https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap';
+        fontLink.rel = 'stylesheet';
+        document.head.appendChild(fontLink);
+
+        const fontLink2 = document.createElement('link');
+        fontLink2.href =
+            'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
+        fontLink2.rel = 'stylesheet';
+        document.head.appendChild(fontLink2);
+
         const style = document.createElement('style');
         style.textContent = `
             body {
                 box-sizing: border-box;
                 margin: 0;
                 padding: 0;
+                font-family: 'Quicksand', 'Gill Sans', sans-serif;
             }
 
             .carousel-container {
+                box-sizing: border-box;
                 width: 100%;
                 max-width: 1290px;
-                margin: 20px auto;
-                padding: 10px 10px;
-                box-sizing: border-box;
-                background-color: #fef6eb;
-                border: 1px solid #eee;
-                border-radius: 8px;
+                margin: 0 auto;
+                margin-top: 20px;
+                border-radius: 30px;
+                box-shadow: 0 5px 5px -5px rgba(0,0,0,0.1);
             }
             
             .carousel-title {
-                font-size: 1.8rem;
+                
+                font-size: 3.1rem;
                 font-weight: bold;
-                margin-bottom: 15px;
-                margin-left: 15px;
                 color: #f28e00;
-                font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+                background-color: #fef6eb;
+                padding: 22px 30px;
+                margin: 0 0 5px 0;
+                border-radius: 30px 30px 0 0;
+                
             }
             
             .carousel {
@@ -188,21 +208,24 @@
                 display: flex;
                 gap: 15px;
                 overflow-x: auto;
-                padding: 10px 5px;
+                padding: 20px 5px;
                 scrollbar-width: none;
             }
             
             .product-card {
-                font-family:Georgia, 'Times New Roman', Times, serif;
+                font-family: Georgia, 'Times New Roman', Times, serif;
                 background-color: #fff;
                 flex: 0 0 auto;
-                width: 200px;
+                width: 19%; 
+                min-height: 380px; 
                 border: 1px solid #eee;
-                border-radius: 20px;
-                padding: 10px;
+                border-radius: 10px;
+                padding: 20px;
                 position: relative;
                 transition: transform 0.3s;
                 text-decoration: none;
+                display: flex; 
+                flex-direction: column; 
             }
             
             .product-card:hover {
@@ -213,16 +236,18 @@
 
             .product-card a {
                 text-decoration: none;
-}
-            
+            }
+                
+
             .product-card-image {
                 width: 100%;
-                height: 180px;
+                height: 200px;
                 object-fit: contain;
-                margin-bottom: 10px;
+                margin-bottom: 15px;
             }
             
             .product-card-name {
+                font-family: 'Poppins', cursive, sans-serif;
                 font-size: 12px;
                 margin: 0 0 10px 0;
                 color: #7d7d7d;
@@ -234,7 +259,7 @@
             }
             
             .product-price-container {
-                font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                font-family: 'Poppins', cursive, sans-serif;
                 display: flex;
                 flex-direction: column;
                 gap: 5px;
@@ -242,7 +267,13 @@
             
             .product-price-current {
                 font-weight: bold;
-                color: #e91e63;
+                color: #7d7d7d;
+                font-size: 16px;
+            }
+
+            .product-price-current-discount {
+                font-weight: bold;
+                color: #00a365;
                 font-size: 16px;
             }
             
@@ -253,7 +284,7 @@
             }
             
             .carousel-discount {
-                background-color: #e91e63;
+                background-color: #00a365;
                 color: white;
                 padding: 2px 5px;
                 border-radius: 4px;
@@ -263,6 +294,7 @@
             
             .product-favorite {
                 position: absolute;
+                line-height: 1;
                 top: 15px;
                 right: 15px;
                 background: white;
@@ -275,7 +307,7 @@
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
-                font-size: 25px;
+                font-size: 25px !important;
                 box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             }
             .carousel-prev,
@@ -285,24 +317,24 @@
                 color: #f28e00;
                 font-weight: bold;
                 top: 45%;
-                width: 40px;
-                height: 40px;
+                width: 50px;
+                height: 50px;
                 border: none;
                 border-radius: 100%;
                 box-shadow: 0 2px 5px rgba(0,0,0,0.2);
                 cursor: pointer;
                 z-index: 1;
-                font-size: 18px;
+                font-size: 28px;
                 transition: transform 0.3s;
 
             }
             
             .carousel-prev {
-                left: -20px;
+                left: -63px;
             }
             
             .carousel-next {
-                right: -20px;
+                right: -63px;
             }
 
             .carousel-prev:hover,
@@ -313,19 +345,47 @@
             }
             
             @media (max-width: 768px) {
+                .carousel-container {
+                    width: 100%; 
+                    padding: 0 10px;
+                }
+
+                
                 .product-card {
-                    width: 160px;
+                    width: 160px; 
+                    min-width: 240px; 
+                    padding: 15px; 
+                    border-radius: 10px;
+                }
+
+            }
+            
+            @media (max-width: 1480px) {
+                
+                .carousel-container {
+                    box-sizing: border-box;
+                    width: 97%;
+                    max-width: 1290px;
+                    margin: 0 auto;
+                    margin-top: 20px;
+                    border-radius: 30px;
+                    box-shadow: 0 5px 5px -5px rgba(0,0,0,0.1);
                 }
                 
-                .product-card-image {
-                    height: 140px;
-                }
-                
-                .carousel-prev,
-                .carousel-next {
-                    width: 30px;
-                    height: 30px;
-                    font-size: 14px;
+                .product-card {
+                    font-family: Georgia, 'Times New Roman', Times, serif;
+                    background-color: #fff;
+                    flex: 0 0 auto;
+                    width: 32%; 
+                    min-height: 380px; 
+                    border: 1px solid #eee;
+                    border-radius: 10px;
+                    padding: 20px;
+                    position: relative;
+                    transition: transform 0.3s;
+                    text-decoration: none;
+                    display: flex; 
+                    flex-direction: column; 
                 }
             }
         `;
