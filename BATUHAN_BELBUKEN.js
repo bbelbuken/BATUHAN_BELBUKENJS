@@ -1,8 +1,5 @@
 (() => {
-    if (
-        !window.location.pathname.endsWith('/') &&
-        !window.location.pathname.endsWith('/index.html')
-    ) {
+    if (!window.location.pathname.endsWith('/')) {
         console.log('wrong page');
         return;
     }
@@ -13,14 +10,14 @@
             buildCSS();
             buildHTML(products);
             setEvents();
-            updateFavoriteStatus();
+            getLocalFavs();
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
     const loadProducts = async () => {
-        const cached = localStorage.getItem('ebebekProducts');
+        const cached = localStorage.getItem('ebebek-urunler');
         if (cached) {
             const products = JSON.parse(cached);
             return products;
@@ -30,56 +27,51 @@
                 'https://gist.githubusercontent.com/sevindi/8bcbde9f02c1d4abe112809c974e1f49/raw/9bf93b58df623a9b16f1db721cd0a7a539296cf0/products.json'
             );
             const products = await response.json();
-            localStorage.setItem('ebebekProducts', JSON.stringify(products));
+            localStorage.setItem('ebebek-urunler', JSON.stringify(products));
             return products;
         } catch (error) {
-            console.error('Failed to load products:', error);
+            console.error('Error while fetching:', error);
         }
     };
 
-    const updateFavoriteStatus = () => {
+    const getLocalFavs = () => {
         const cached =
-            JSON.parse(localStorage.getItem('ebebekFavorites')) || [];
-        document.querySelectorAll('.product-favorite').forEach((button) => {
-            const productId = button.dataset.id;
-            if (cached.includes(productId)) {
-                button.innerHTML = '🧡';
-            } else {
-                button.innerHTML = '♡';
-            }
+            JSON.parse(localStorage.getItem('ebebek-local-favoriler')) || [];
+        document.querySelectorAll('.ebebek-favoriler').forEach((btn) => {
+            btn.innerHTML = cached.includes(btn.dataset.id) ? '🧡' : '♡';
         });
     };
 
     const buildHTML = (products) => {
-        const carouselContainer = document.createElement('div');
-        carouselContainer.className = 'carousel-container';
+        const container = document.createElement('div');
+        container.className = 'container';
 
-        const title = document.createElement('h2');
-        title.className = 'carousel-title';
-        carouselContainer.appendChild(title);
+        const titleDiv = document.createElement('h2');
+        titleDiv.className = 'carousel-title';
+        container.appendChild(titleDiv);
 
-        const titleSpan = document.createElement('span');
-        titleSpan.textContent = 'Beğenebileceğinizi düşündüklerimiz';
-        titleSpan.style.marginLeft = '38px';
-        title.appendChild(titleSpan);
+        const title = document.createElement('span');
+        title.textContent = 'Beğenebileceğinizi düşündüklerimiz';
+        title.style.marginLeft = '38px';
+        titleDiv.appendChild(title);
 
         const carousel = document.createElement('div');
         carousel.className = 'carousel';
-        carouselContainer.appendChild(carousel);
+        container.appendChild(carousel);
 
         const prevBtn = document.createElement('button');
         prevBtn.className = 'carousel-prev';
-        prevBtn.innerHTML = '&lt;';
+        prevBtn.innerHTML = '<';
         carousel.appendChild(prevBtn);
 
         const nextBtn = document.createElement('button');
         nextBtn.className = 'carousel-next';
-        nextBtn.innerHTML = '&gt;';
+        nextBtn.innerHTML = '>';
         carousel.appendChild(nextBtn);
 
-        const productsWrapper = document.createElement('div');
-        productsWrapper.className = 'carousel-wrapper';
-        carousel.appendChild(productsWrapper);
+        const productsContainer = document.createElement('div');
+        productsContainer.className = 'products-container';
+        carousel.appendChild(productsContainer);
 
         products.forEach((product) => {
             const productCard = document.createElement('div');
@@ -111,39 +103,40 @@
             currentPrice.textContent = `${product.price} TL`;
             priceContainer.appendChild(currentPrice);
 
-            const addToCartBtn = document.createElement('button');
-            addToCartBtn.className = 'add-to-cart';
-            addToCartBtn.textContent = 'Sepete Ekle';
-            productCard.appendChild(addToCartBtn);
+            const sepeteEkle = document.createElement('button');
+            sepeteEkle.className = 'add-to-cart';
+            sepeteEkle.textContent = 'Sepete Ekle';
+            productCard.appendChild(sepeteEkle);
 
-            let originalPrice, discountSection;
+            let oldPrice, discountDiv;
 
             if (
                 product.original_price &&
                 product.original_price !== product.price
             ) {
                 currentPrice.className = 'product-price-current-discount';
-                originalPrice = document.createElement('span');
-                originalPrice.className = 'product-price-original';
-                originalPrice.textContent = `${product.original_price} TL`;
+                oldPrice = document.createElement('span');
+                oldPrice.className = 'old-price';
+                oldPrice.textContent = `${product.original_price} TL`;
 
                 const discount = Math.round(
                     (1 - product.price / product.original_price) * 100
                 );
-                discountSection = document.createElement('span');
-                discountSection.className = 'carousel-discount';
-                discountSection.textContent = `%${discount} indirim`;
 
-                priceContainer.appendChild(originalPrice);
-                priceContainer.appendChild(discountSection);
+                discountDiv = document.createElement('span');
+                discountDiv.className = 'carousel-discount';
+                discountDiv.textContent = `%${discount} indirim`;
+
+                priceContainer.appendChild(oldPrice);
+                priceContainer.appendChild(discountDiv);
             }
 
-            const favoriteButton = document.createElement('button');
-            favoriteButton.className = 'product-favorite';
-            favoriteButton.dataset.id = product.id;
-            productCard.appendChild(favoriteButton);
+            const favButton = document.createElement('button');
+            favButton.className = 'ebebek-favoriler';
+            favButton.dataset.id = product.id;
+            productCard.appendChild(favButton);
 
-            productsWrapper.appendChild(productCard);
+            productsContainer.appendChild(productCard);
         });
 
         const storiesSection =
@@ -152,12 +145,9 @@
             document.querySelector('.Section1');
 
         if (storiesSection) {
-            storiesSection.insertAdjacentElement('afterend', carouselContainer);
+            storiesSection.insertAdjacentElement('afterend', container);
         } else {
-            document.body.insertAdjacentElement(
-                'afterbegin',
-                carouselContainer
-            );
+            document.body.insertAdjacentElement('afterbegin', container);
         }
     };
 
@@ -183,7 +173,7 @@
                 font-family: 'Quicksand', 'Gill Sans', sans-serif;
             }
 
-            .carousel-container {
+            .container {
                 box-sizing: border-box;
                 width: 100%;
                 max-width: 1290px;
@@ -209,7 +199,7 @@
                 position: relative;
             }
             
-            .carousel-wrapper {
+            .products-container {
                 display: flex;
                 gap: 15px;
                 overflow-x: auto;
@@ -282,7 +272,7 @@
                 font-size: 16px;
             }
             
-            .product-price-original {
+            .old-price {
                 text-decoration: line-through;
                 color: #999;
                 font-size: 14px;
@@ -326,7 +316,7 @@
                 box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             }
             
-            .product-favorite {
+            .ebebek-favoriler {
                 position: absolute;
                 line-height: 1;
                 top: 15px;
@@ -379,7 +369,7 @@
             }
             
             @media (max-width: 768px) {
-                .carousel-container {
+                .container {
                     width: 100%; 
                     padding: 0 10px;
                 }
@@ -398,7 +388,7 @@
             
             @media (max-width: 1480px) {
                 
-                .carousel-container {
+                .container {
                     box-sizing: border-box;
                     width: 97%;
                     max-width: 1290px;
@@ -430,7 +420,7 @@
     };
 
     const setEvents = () => {
-        const carousel = document.querySelector('.carousel-wrapper');
+        const carousel = document.querySelector('.products-container');
         const prevBtn = document.querySelector('.carousel-prev');
         const nextBtn = document.querySelector('.carousel-next');
 
@@ -444,12 +434,12 @@
             });
         }
 
-        document.querySelectorAll('.product-favorite').forEach((button) => {
+        document.querySelectorAll('.ebebek-favoriler').forEach((button) => {
             button.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const productId = button.dataset.id;
                 const favorites = JSON.parse(
-                    localStorage.getItem('ebebekFavorites') || '[]'
+                    localStorage.getItem('ebebek-local-favoriler') || '[]'
                 );
 
                 if (button.textContent === '♡') {
@@ -457,7 +447,7 @@
                     if (!favorites.includes(productId)) {
                         favorites.push(productId);
                         localStorage.setItem(
-                            'ebebekFavorites',
+                            'ebebek-local-favoriler',
                             JSON.stringify(favorites)
                         );
                     }
@@ -467,7 +457,7 @@
                     if (index > -1) {
                         favorites.splice(index, 1);
                         localStorage.setItem(
-                            'ebebekFavorites',
+                            'ebebek-local-favoriler',
                             JSON.stringify(favorites)
                         );
                     }
