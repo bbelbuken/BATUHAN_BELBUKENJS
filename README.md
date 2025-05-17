@@ -4,7 +4,7 @@ Bu proje, ebebek.com ana sayfasında çalışacak şekilde tasarlanmış, **sade
 
 ## 🔔 Önemli Notlar
 
-1. **Kullanıcı Değerlendirmelerı**  
+1. **Kullanıcı Değerlendirmeleri**  
     PDF dokümanında ve fetch edilen verilerde bu bölüme dair herhangi bir bilgi bulunmadığı için, kullanıcı değerlendirmeleri ve puanlar karusel içinde gösterilmemektedir. Ancak bu özellikler istenildiği takdirde kolaylıkla eklenebilir.
 
 2. **Karusel Yerleştirme Mantığı**  
